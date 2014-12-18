@@ -1,4 +1,4 @@
 card-api
 ========
 
-The official locly Card API documentation.
+The official locly Card API documentation

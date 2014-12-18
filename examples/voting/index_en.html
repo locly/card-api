@@ -1,0 +1,155 @@
+<html>
+<head>
+	<style>
+		body {
+			font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+			font-weight: 300;
+			color: #1a1a1a;
+		}
+
+		h1 {
+			margin-left: 20px;
+		}
+
+		.opt {
+			border: 3px solid #f2f2f2;
+			margin: 20px;
+			padding: 20px;
+			border-radius: 5px;
+			-webkit-border-radius: 2px;
+		}
+		.opt h3 {
+			margin-top: 0px;
+		}
+
+		.opt.mine {
+			border: 3px solid rgb(82, 124, 67);
+		}
+
+		.bar-cont {
+			width: 100%;
+		}
+		.bar {
+			background-color: red;
+			height: 40px;
+			width: 0px;
+			box-sizing: border-box;
+			border-left: 20px solid red;
+		}
+		.count {
+			font-size: 75%;
+			font-weight: normal;
+		}
+
+		#opt0 .bar {
+			background-color: rgb(70,119,113);
+			border-left-color: rgb(70,119,113);
+		}
+		#opt1 .bar {
+			background-color: rgb(114, 157, 98);
+			border-left-color:rgb(114, 157, 98);
+		}
+		#opt2 .bar {
+			background-color: rgb(157, 209, 133);
+			border-left-color: rgb(157, 209, 133);
+		}
+		#opt3 .bar {
+			background-color: rgb(216, 252, 116);
+			border-left-color: rgb(216, 252, 116);
+		}
+		#opt4 .bar {
+			background-color: rgb(125, 175, 166);
+			border-left-color: rgb(125, 175, 166);
+		}
+	</style>
+	<script type="text/javascript" src="/LoclyClasses/LoclyCard.js"></script>
+</head>
+<body>
+
+	<h1>Favourite Programming Language</h1>
+
+	<div id="opt0" class="opt">
+		<h3>Java <span class="count"></span></h3>
+		<div class="bar-cont">
+			<div class="bar"></div>
+		</div>
+	</div>
+	<div id="opt1" class="opt">
+		<h3>Python <span class="count"></span></h3>
+		<div class="bar-cont">
+			<div class="bar"></div>
+		</div>
+	</div>
+	<div id="opt2" class="opt">
+		<h3>Ruby <span class="count"></span></h3>
+		<div class="bar-cont">
+			<div class="bar"></div>
+		</div>
+	</div>
+	<div id="opt3" class="opt">
+		<h3>Haskell <span class="count"></span></h3>
+		<div class="bar-cont">
+			<div class="bar"></div>
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+		var options = 4;
+		var myVote = -1;
+		var voteResults = [];
+
+		function render() {
+			var resultsMixin = [];
+			for (var i = 0; i < options; i++) {
+				if (voteResults[i] === undefined) {
+					resultsMixin[i] = 0;
+				} else {
+					resultsMixin[i] = voteResults[i];
+				}
+				
+				if (myVote === i) { resultsMixin[i]++; }
+			}
+
+			var max = Math.max.apply(this, resultsMixin);
+			max = Math.max(max, 1);
+
+			for (var i = 0; i < resultsMixin.length; i++) {
+				var bar = document.querySelector('#opt' + i + ' .bar');
+				var count = document.querySelector('#opt' + i + ' .count');
+				var percentage = (resultsMixin[i] / max) * 100;
+				bar.style.width = percentage + '%';
+
+				switch (resultsMixin[i]) {
+					case 0 : count.innerHTML = 'No votes yet'; break;
+					case 1 : count.innerHTML = '1 vote'; break;
+					default : count.innerHTML = resultsMixin[i] + ' votes';
+				}
+			}
+		}
+
+		for (var i = 0; i < options; i++) {
+			(function(i) {
+				document.querySelector('#opt' + i).addEventListener('click', function(evt) {		
+					evt.preventDefault();
+					locly.beacon.poll.transmitResult(i);
+					myVote = i;
+					for (var j = 0, e; e = document.querySelectorAll('.opt')[j]; j++) {
+						e.classList.remove('mine');
+					}
+					document.querySelector('#opt' + i).classList.add('mine');
+					render();
+				});
+			})(i);
+		}
+
+
+		setInterval(function() {
+			locly.beacon.poll.results(function(results) {
+				voteResults = results;
+				render();
+			});
+		}, 250);
+	</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Locly UrlScheme Example</title>
+</head>
+<body>
+
+	<p><a href="web://locly.com">Open http://locly.com in safari</a></p>
+	<p><a href="webs://locly.com">Open https://locly.com in safari</a></p>
+
+	<div>
+		<img src="map_small.png" id="map" />
+		<p><small><em>Tap the map to go fullscreen</em></small></p>
+	</div>
+
+	<p><a href="open://map.png">Open the map in an image app</a></p>
+
+
+	<script type="text/javascript">
+		//Preload the large map
+		setTimeout(function() {
+			window.location.href = 'preload://map.png';
+		}, 1);
+
+		// Bind a click handler onto the map
+		document.getElementById('map').addEventListener('click', function(evt) {
+			evt.preventDefault();
+			window.location.href = 'fsimg://map.png';
+		}, false);
+	</script>
+</body>
+</html>
