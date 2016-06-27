@@ -60,7 +60,7 @@ The Locly App provides a JavaScript API that wraps many common tasks that a card
 
 ```html
 <head>
-	<script type="text/javascript" src="LoclyClasses/LoclyCard.js"></script>
+	<script type="text/javascript" src="/LoclyClasses/LoclyCard.js"></script>
 </head>
 ```
 At run time this script will be evaluated and included in the card. The API sits under the `window.locly` namespace to avoid naming conflicts.
